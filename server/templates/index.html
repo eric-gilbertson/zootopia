@@ -1,0 +1,46 @@
+$def with (playlist)
+<!DOCTYPE html>
+<html>
+<head>
+<title>Zootopia</title>
+<script src="static/app.js"></script>
+<meta charset='UTF-8' />
+<style> 
+body { 
+   font-family: Catamaran, sans-serif;
+}
+.top-container {
+   width: 600px;
+   margin: auto;
+   border: 1px solid gray;
+}
+</style> 
+</head>
+
+
+
+<body>
+<div class='top-container'>
+<h3 style='text-align:center' >KZSU Zootopia</h3>
+
+<h4>Playlist for: $playlist[0].date.strftime("%m/%d/%y")</h4>
+
+<table>
+  <theader>
+    <tr>
+      <th>Date</th>
+      <th>Artist</th>
+      <th>Song</th>
+    </tr>
+  </theader>
+  <tbody>
+    $for song in playlist:
+        <tr>
+          <td>$song.date.strftime("%H:%M:%S")</td>
+          <td>$song.artist</td>
+          <td>$song.title</td>
+        </tr>
+  </tbody>
+</table>
+
+</html>
