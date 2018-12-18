@@ -23,7 +23,11 @@ body {
 <div class='top-container'>
 <h3 style='text-align:center' >KZSU Zootopia</h3>
 
-<h4>Playlist for: $playlist[0].date.strftime("%m/%d/%y")</h4>
+$if len(playlist) > 0:
+    <h4>Playlist for: $playlist[0].date.strftime("%m/%d/%y")</h4>
+$else:
+    <h4>Playlist is empty</h4>
+
 
 <table>
   <theader>

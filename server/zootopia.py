@@ -5,7 +5,7 @@ import os
 from collections import deque
 import datetime
 
-playlist = deque([], maxlen=4)
+playlist = deque([], maxlen=25)
 
 render = web.template.render('templates/')
 
