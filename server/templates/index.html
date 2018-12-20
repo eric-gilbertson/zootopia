@@ -34,7 +34,11 @@ h4 {
 <div class='top-container'>
 <img src='images/zootopia.png'></img>
 
-<h4>Playlist for: $playlist[0].date.strftime("%m/%d/%y")</h4>
+$if len(playlist) > 0:
+    <h4>Playlist for: $playlist[0].date.strftime("%m/%d/%y")</h4>
+$else:
+    <h4>Playlist is empty</h4>
+
 
 
     $for song in playlist:
