@@ -41,11 +41,11 @@ $else:
 
 
 
-    $for song in playlist:
-        <div class='song-row'>
+$for song in playlist:
+    <div class='song-row'>
           $song.date.strftime("%H:%M:%S")
           <span>$song.title</span>
           <div>$song.artist</div>
-        </div>
+    </div>
 </body>
 </html>
