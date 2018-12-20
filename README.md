@@ -11,4 +11,20 @@ via HTTP GET requests. The app stores the most recent N tracks in memory
 (no presistance yet) and uses it to build a web page that displays them
 to users.
 
+1) Configuring RadioLogik to publish to web app
+Radiologik must be configured to push each song to the web app. This is done
+as follows:
+
+    * open Preferences dialog
+    * enter 'http://127.0.0.1:8080/logsong?artist=<a>&title=<t>' into the GET URL 1' field
+    * Click OK
+
+Once configured RadiologiK will publish each song it plays via and HTTP GET 
+command to the web server.
+
+
+Required Python libraries:
+    * web.py 0.38
+`
+
 
