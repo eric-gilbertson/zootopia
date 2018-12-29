@@ -4,42 +4,66 @@ $def with (playlist)
 <head>
 <title>Zootopia</title>
 <script src="static/app.js"></script>
+<link rel="shortcut icon" href="/images/favicon.ico">
 <meta charset='UTF-8' />
 <style> 
 body { 
    font-family: Catamaran, sans-serif;
-   color: #ff7550;
+   color: #C43825;
 }
 
 .top-container {
-   width: 320px;
+   background-repeat: no-repeat;
+   background-color: #FFFFFF;
+   border: 1px solid white;
    margin: auto;
 }
 .song-row span {
     font-weight: bold;
 }
-.song-row div {
-    margin-left:66px;
-}
 h4 {
-    margin-top: 8px;
     margin-bottom: 8px;
 }
+
+@media screen and (min-width:640px) {
+  h4 {
+     margin-top: 250px;
+  }
+
+  .top-container {
+    background-image: url("/images/zootopia2.png");
+    width: 640px;
+  }
+
+  .song-row div {
+    display: inline-block;
+  }
+}
+
+@media screen and (max-width:640px) {
+  .top-container {
+    background-image: url("/images/zootopia.png");
+    width: 320px;
+  }
+
+  h4 {
+     margin-top: 130px;
+  }
+  .song-row div {
+    margin-left:66px;
+  }
+}
+
 </style> 
 </head>
 
-
-
 <body>
 <div class='top-container'>
-<img src='images/zootopia.png'></img>
 
 $if len(playlist) > 0:
     <h4>Playlist for: $playlist[0].date.strftime("%m/%d/%y")</h4>
 $else:
     <h4>Playlist is empty</h4>
-
-
 
 $for song in playlist:
     <div class='song-row'>
@@ -47,5 +71,6 @@ $for song in playlist:
           <span>$song.title</span>
           <div>$song.artist</div>
     </div>
+
 </body>
 </html>
