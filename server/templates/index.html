@@ -6,6 +6,8 @@ $def with (playlist)
 <script src="static/app.js"></script>
 <link rel="shortcut icon" href="/images/favicon.ico">
 <meta charset='UTF-8' />
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <style> 
 body { 
    font-family: Catamaran, sans-serif;
@@ -25,7 +27,7 @@ h4 {
     margin-bottom: 8px;
 }
 
-@media screen and (min-width:640px) {
+@media screen and (min-width:680px) {
   h4 {
      margin-top: 250px;
   }
@@ -40,12 +42,15 @@ h4 {
   }
 }
 
-@media screen and (max-width:640px) {
+@media screen and (max-width:680px) {
   .top-container {
     background-image: url("/images/zootopia.png");
     width: 320px;
   }
 
+  small {
+    display: none;
+  }
   h4 {
      margin-top: 130px;
   }
@@ -58,6 +63,7 @@ h4 {
 </head>
 
 <body>
+
 <div class='top-container'>
 
 $if len(playlist) > 0:
@@ -69,8 +75,23 @@ $for song in playlist:
     <div class='song-row'>
           $song.date.strftime("%H:%M:%S")
           <span>$song.title</span>
-          <div>$song.artist</div>
+          <div><small> - </small>$song.artist</div>
     </div>
 
+
+<script>
+var lastTime = '';
+function getSongs() {
+    fetch('/songs').then(function(response) {
+        return response.json();
+      }).then(function(myJson) {
+        console.log(JSON.stringify(myJson));
+      });
+}
+function checkSongs() {
+    getSongs();
+    console.log('check songs');
+}
+</script>
 </body>
 </html>
