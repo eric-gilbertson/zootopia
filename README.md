@@ -16,11 +16,18 @@ Radiologik must be configured to push each song to the web app. This is done
 as follows:
 
     * open Preferences dialog
-    * enter 'http://127.0.0.1:8080/logsong?artist=<a>&title=<t>' into the GET URL 1' field
+    * enter 'http://127.0.0.1/logsong?artist=<a>&title=<t>' into the GET URL 1' field
     * Click OK
 
 Once configured RadiologiK will publish each song it plays via and HTTP GET 
 command to the web server.
+
+In order for the web server to access the RL generated playlist artwork a
+symbolic link must be made from ./images/albumart to the albumart directory
+under the RL installation. Typically this is done as follows:
+
+   * cd ./images
+   * ln -s $HOME/Music/Radiologik/Web/albumart .
 
 
 Required Python libraries:
