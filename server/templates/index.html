@@ -7,11 +7,14 @@ $def with (playlist)
 <link rel="shortcut icon" href="/images/favicon.ico">
 <meta charset='UTF-8' />
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href='https://fonts.googleapis.com/css?family=Roboto Slab' rel='stylesheet'>
 
 <style> 
-body { 
-   font-family: Catamaran, sans-serif;
+body {
+   font-family: 'Roboto Slab';
+   font-size: 14px;
    color: #C43825;
+   text-transform: uppercase;
 }
 
 .top-container {
@@ -21,15 +24,16 @@ body {
    margin: auto;
 }
 .song-row span {
-    font-weight: bold;
+    font-weight: 700;
 }
 h4 {
     margin-bottom: 8px;
 }
 
 @media screen and (min-width:680px) {
-  h4 {
-     margin-top: 250px;
+  .current-song
+     margin-left: 0px; 
+     margin-top:0px;
   }
 
   .top-container {
@@ -39,10 +43,11 @@ h4 {
 
   .song-row div {
     display: inline-block;
+    margin-bottom: 5px;
   }
 }
 
-@media screen and (max-width:680px) {
+@media screen and (max-width: 680px) {
   .top-container {
     background-image: url("/images/zootopia.png");
     width: 320px;
@@ -52,10 +57,10 @@ h4 {
     display: none;
   }
   h4 {
-     margin-top: 130px;
   }
   .song-row div {
-    margin-left:66px;
+    margin-left: 44px;
+    margin-bottom: 5px;
   }
 }
 
@@ -66,26 +71,44 @@ h4 {
 
 <div class='top-container'>
 
+
 $if len(playlist) > 0:
-    <h4>Playlist for: $playlist[0].date.strftime("%m/%d/%y")</h4>
+     <img class='current-song' style='margin-left: 20px; margin-top:20px' alt="Current Song" src="/images/current-song.jpg">
+    <h4>Playlist for $playlist[0].date.strftime("%B %d, %Y")</h4>
 $else:
     <h4>Playlist is empty</h4>
 
+<div id='song-list'
 $for song in playlist:
     <div class='song-row'>
-          $song.date.strftime("%H:%M:%S")
-          <span>$song.title</span>
-          <div><small> - </small>$song.artist</div>
+          $song.date.strftime("%H:%M")
+          <span>&nbsp;&nbsp;$song.title</span>
+          <div><small> — </small>$song.artist</div>
     </div>
+</div>
 
 
 <script>
+console.log('xxxxxxxxx');
 var lastTime = '';
 function getSongs() {
     fetch('/songs').then(function(response) {
         return response.json();
-      }).then(function(myJson) {
-        console.log(JSON.stringify(myJson));
+      }).then(function(songs) {
+        curSong = songs[0];
+        rows = document.getElementsByClassName("song-row");
+        curTime = rows[0].innerText.trim().split(' ')[0];
+        haveChange = curTime !== songs[0].date;
+        if (haveChange) {
+            for(i=0; i < songs.length; i++) {
+                let song = songs[i];
+                if (song.date === curTime)
+                    break;
+
+                let rowDiv = document.createElement('div').setAttribute('class', 'song-row').textContent(song.date);
+                let titleSpan = document.createElement('span').textContent(song.title);;
+
+        console.log("song: ", haveChange);
       });
 }
 function checkSongs() {

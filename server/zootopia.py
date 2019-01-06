@@ -12,9 +12,8 @@ render = web.template.render('templates/')
 urls = (
     '/', 'index',
     '/logsong', 'logsong',
+    '/songs', 'songs',
     '/images/(.*)', 'images' #this is where the image folder is located....
-
-
 )
 
 class Song(object):
@@ -23,6 +22,9 @@ class Song(object):
         self.title = title
         self.date = datetime.datetime.now()
 
+    def toDict(self):
+        ret_val = {'date':self.date.strftime("%H:%M:%S"), 'artist':self.artist, 'title':self.title}
+        return ret_val
 
 class index:
     def GET(self):
@@ -30,7 +32,7 @@ class index:
 
 class images:
     def GET(self, name):
-        ext = name.split(".")[-1]  # Gather extension
+        ext = name.split(".")[-1]
 
         cType = {
             "png": "images/png",
@@ -38,11 +40,28 @@ class images:
             "gif": "images/gif",
             "ico": "images/x-icon"}
 
-        if name in os.listdir('images'):  # Security
+        file_path = None
+        if name == 'current-song.jpg':
+            file_path = './images/albumart/art-00.jpg'
+        elif name in os.listdir('images'):  # Security
+            file_path = 'images/{0}'.format(name)
+
+        if file_path:
             web.header("Content-Type", cType[ext])  # Set the Header
-            return open('images/%s' % name, "rb").read()  # Notice 'rb' for reading images
+            return open(file_path, "rb").read()  # Notice 'rb' for reading images
         else:
             raise web.notfound()
+
+class songs:
+    def GET(self):
+        params = web.input()
+        web.header('Content-Type', 'application/json')
+        web.header('Access-Control-Allow-Origin', '*')
+        songs = []
+        for song in playlist:
+            songs.append(song.toDict())
+
+        return json.dumps(songs)
 
 class logsong:
     def GET(self):
