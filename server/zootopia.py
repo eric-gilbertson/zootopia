@@ -7,6 +7,25 @@ import datetime
 
 playlist = deque([], maxlen=25)
 
+class Song(object):
+    def __init__(self, artist, title):
+        self.artist = artist
+        self.title = title
+        self.date = datetime.datetime.now()
+
+    def toDict(self):
+        ret_val = {'date':self.date.strftime("%H:%M"), 'artist':self.artist, 'title':self.title}
+        return ret_val
+
+
+
+def add_test_songs():
+    for i in range(0, 1):
+        song = Song('artist_' + str(i), 'title_' + str(i))
+        playlist.appendleft(song)
+
+add_test_songs()
+
 render = web.template.render('templates/')
 
 urls = (
@@ -15,16 +34,6 @@ urls = (
     '/songs', 'songs',
     '/images/(.*)', 'images' #this is where the image folder is located....
 )
-
-class Song(object):
-    def __init__(self, artist, title):
-        self.artist = artist
-        self.title = title
-        self.date = datetime.datetime.now()
-
-    def toDict(self):
-        ret_val = {'date':self.date.strftime("%H:%M:%S"), 'artist':self.artist, 'title':self.title}
-        return ret_val
 
 class index:
     def GET(self):
@@ -66,7 +75,7 @@ class songs:
 class logsong:
     def GET(self):
         params = web.input()
-        print "log song: {}:{}".format(params.artist, params.title)
+        #print "log song: {}:{}".format(params.artist, params.title)
         song = Song(params.artist, params.title)
         playlist.appendleft(song)
         return 'success'

@@ -3,7 +3,6 @@ $def with (playlist)
 <html>
 <head>
 <title>Zootopia</title>
-<script src="static/app.js"></script>
 <link rel="shortcut icon" href="/images/favicon.ico">
 <meta charset='UTF-8' />
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -17,50 +16,83 @@ body {
    text-transform: uppercase;
 }
 
-.top-container {
+header {
    background-repeat: no-repeat;
-   background-color: #FFFFFF;
-   border: 1px solid white;
+}
+
+.top-container {
    margin: auto;
 }
 .song-row span {
     font-weight: 700;
 }
-h4 {
-    margin-bottom: 8px;
+
+div.song-container {
+    margin-left: 20px;
 }
 
 @media screen and (min-width:680px) {
-  .current-song
-     margin-left: 0px; 
-     margin-top:0px;
+  header {
+    background-image: url("/images/zootopia2.png");
+    height: 240px;
   }
 
   .top-container {
-    background-image: url("/images/zootopia2.png");
     width: 640px;
+  }
+
+  #current-song {
+    margin-left: 20px;
+    margin-top: 20px;
   }
 
   .song-row div {
     display: inline-block;
     margin-bottom: 5px;
   }
+
+  h4 {
+    margin-top: 12px;
+    margin-bottom: 8px;
+  }
+
+  div.song-container {
+      margin-left: 20px;
+  }
 }
 
 @media screen and (max-width: 680px) {
   .top-container {
-    background-image: url("/images/zootopia.png");
     width: 320px;
   }
 
-  small {
+  header {
+    background-image: url("/images/zootopia.png");
+    height: 120px;
+  }
+  #current-song {
+    width: 100px;
+    height: 100px;
+    margin-left: 10px;
+    margin-top: 10px;
+  }
+  
+  h4 {
+    margin-top: 10px;
+    margin-bottom: 8px;
+  }
+
+  .song-row small {
     display: none;
   }
-  h4 {
-  }
+
   .song-row div {
     margin-left: 44px;
     margin-bottom: 5px;
+  }
+
+  div.song-container {
+    margin-left: 10px;
   }
 }
 
@@ -68,53 +100,64 @@ h4 {
 </head>
 
 <body>
+<!-- <button onclick='checkSongs()'>Check Songs</button></br> -->
 
 <div class='top-container'>
-
-
-$if len(playlist) > 0:
-     <img class='current-song' style='margin-left: 20px; margin-top:20px' alt="Current Song" src="/images/current-song.jpg">
-    <h4>Playlist for $playlist[0].date.strftime("%B %d, %Y")</h4>
-$else:
-    <h4>Playlist is empty</h4>
-
-<div id='song-list'
-$for song in playlist:
-    <div class='song-row'>
-          $song.date.strftime("%H:%M")
-          <span>&nbsp;&nbsp;$song.title</span>
-          <div><small> — </small>$song.artist</div>
+    <header>
+        <img id='current-song' alt="Current Song" src="/images/current-song.jpg">
+    </header>
+    <div class='song-container'>
+        $if len(playlist) > 0:
+            <h4>PLAYLIST FOR $playlist[0].date.strftime("%B %d, %Y")</h4>
+        $else:
+            <h4>Playlist is empty</h4>
+    
+        <div id='song-list'>
+            $for song in playlist:
+                <div class='song-row'>
+                    <!-- NOTE: must match JS DOM construction below -->
+                    $song.date.strftime("%H:%M")
+                    <span>&nbsp;&nbsp;$song.title</span>
+                    <div><small> — </small>$song.artist</div>
+                </div>
+        </div>
     </div>
 </div>
 
-
 <script>
-console.log('xxxxxxxxx');
-var lastTime = '';
-function getSongs() {
+function checkSongs() {
     fetch('/songs').then(function(response) {
         return response.json();
-      }).then(function(songs) {
-        curSong = songs[0];
-        rows = document.getElementsByClassName("song-row");
-        curTime = rows[0].innerText.trim().split(' ')[0];
-        haveChange = curTime !== songs[0].date;
+    }).then(function(songs) {
+        let curSong = songs[0];
+        let rows = document.getElementsByClassName("song-row");
+        let curTime = rows[0].innerText.trim().split(' ')[0].trim();
+        let haveChange = curTime !== songs[0].date;
+        let container = document.getElementById("song-list");
+        let sampleRow = container.firstChild;
         if (haveChange) {
-            for(i=0; i < songs.length; i++) {
+            for(let i=0; i < songs.length; i++) {
                 let song = songs[i];
-                if (song.date === curTime)
-                    break;
+                if (song.date === curTime) {
+                    let imgElem = document.getElementById("current-song");
+                    let imgSrc = imgElem.getAttribute('src');
+                    let imgSuffix = imgSrc.indexOf('dummyId') > 0 ? '' : '?dummyId=1';
+                    imgSrc = '/images/current-song.jpg' + imgSuffix;;
+                    imgElem.src = imgSrc;
+                    return;
+                }
 
-                let rowDiv = document.createElement('div').setAttribute('class', 'song-row').textContent(song.date);
-                let titleSpan = document.createElement('span').textContent(song.title);;
+                let newRow = document.createElement('div');
+                newRow.classList.add('song-row');
+                //NOTE: must match HTML template used by server.
+                newRow.innerHTML = song.date + '<span>&nbsp;&nbsp; ' + song.title + '</span><div><small> — </small> ' + song.artist;
+                container.insertBefore(newRow, sampleRow);
+            }
+        }
+    });
+}
 
-        console.log("song: ", haveChange);
-      });
-}
-function checkSongs() {
-    getSongs();
-    console.log('check songs');
-}
+setInterval(checkSongs, 5000);
 </script>
 </body>
 </html>
