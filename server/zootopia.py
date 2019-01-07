@@ -75,7 +75,7 @@ class songs:
 class logsong:
     def GET(self):
         params = web.input()
-        print "log song: {}:{}".format(params.artist, params.title)
+        #print "log song: {}:{}".format(params.artist, params.title)
         song = Song(params.artist, params.title)
         playlist.appendleft(song)
         return 'success'

@@ -16,10 +16,11 @@ body {
    text-transform: uppercase;
 }
 
-.top-container {
+header {
    background-repeat: no-repeat;
-   background-color: #FFFFFF;
-   border: 1px solid white;
+}
+
+.top-container {
    margin: auto;
 }
 .song-row span {
@@ -31,17 +32,16 @@ div.song-container {
 }
 
 @media screen and (min-width:680px) {
-  .current-song {
-     margin-left: 0px; 
-     margin-top:0px;
+  header {
+    background-image: url("/images/zootopia2.png");
+    height: 240px;
   }
 
   .top-container {
-    background-image: url("/images/zootopia2.png");
     width: 640px;
   }
 
-  .current-song {
+  #current-song {
     margin-left: 20px;
     margin-top: 20px;
   }
@@ -52,7 +52,7 @@ div.song-container {
   }
 
   h4 {
-    margin-top: 24px;
+    margin-top: 12px;
     margin-bottom: 8px;
   }
 
@@ -63,11 +63,14 @@ div.song-container {
 
 @media screen and (max-width: 680px) {
   .top-container {
-    background-image: url("/images/zootopia.png");
     width: 320px;
   }
 
-  .current-song {
+  header {
+    background-image: url("/images/zootopia.png");
+    height: 120px;
+  }
+  #current-song {
     width: 100px;
     height: 100px;
     margin-left: 10px;
@@ -100,7 +103,9 @@ div.song-container {
 <!-- <button onclick='checkSongs()'>Check Songs</button></br> -->
 
 <div class='top-container'>
-    <img class='current-song' alt="Current Song" src="/images/current-song.jpg">
+    <header>
+        <img id='current-song' alt="Current Song" src="/images/current-song.jpg">
+    </header>
     <div class='song-container'>
         $if len(playlist) > 0:
             <h4>PLAYLIST FOR $playlist[0].date.strftime("%B %d, %Y")</h4>
@@ -133,8 +138,14 @@ function checkSongs() {
         if (haveChange) {
             for(let i=0; i < songs.length; i++) {
                 let song = songs[i];
-                if (song.date === curTime)
+                if (song.date === curTime) {
+                    let imgElem = document.getElementById("current-song");
+                    let imgSrc = imgElem.getAttribute('src');
+                    let imgSuffix = imgSrc.indexOf('dummyId') > 0 ? '' : '?dummyId=1';
+                    imgSrc = '/images/current-song.jpg' + imgSuffix;;
+                    imgElem.src = imgSrc;
                     return;
+                }
 
                 let newRow = document.createElement('div');
                 newRow.classList.add('song-row');
