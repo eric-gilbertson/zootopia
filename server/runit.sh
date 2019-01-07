@@ -1,4 +1,4 @@
 #!/bin/sh
 
-python zootopia.py
+python zootopia.py 80
 
