@@ -10,7 +10,7 @@ $def with (playlist)
 
 <style> 
 body {
-   font-family: 'Roboto Slab';
+   font-family: 'Roboto Slab', sans-serif;
    font-size: 14px;
    color: #C43825;
    text-transform: uppercase;
@@ -69,6 +69,7 @@ div.song-container {
   header {
     background-image: url("/images/zootopia.png");
     height: 120px;
+    width: 310px;
   }
   #current-song {
     width: 100px;
@@ -129,9 +130,15 @@ function checkSongs() {
     fetch('/songs').then(function(response) {
         return response.json();
     }).then(function(songs) {
+        if (songs.length == 0)
+            return;
+
         let curSong = songs[0];
         let rows = document.getElementsByClassName("song-row");
-        let curTime = rows[0].innerText.trim().split(' ')[0].trim();
+        let curTime = null
+        if (rows.length > 0)
+            curTime = rows[0].innerText.trim().split(' ')[0].trim();
+
         let haveChange = curTime !== songs[0].date;
         let container = document.getElementById("song-list");
         let sampleRow = container.firstChild;
