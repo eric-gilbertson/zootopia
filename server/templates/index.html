@@ -142,8 +142,11 @@ function checkSongs() {
                     let imgElem = document.getElementById("current-song");
                     let imgSrc = imgElem.getAttribute('src');
                     let imgSuffix = imgSrc.indexOf('dummyId') > 0 ? '' : '?dummyId=1';
-                    imgSrc = '/images/current-song.jpg' + imgSuffix;;
-                    imgElem.src = imgSrc;
+                    imgSrc = '/images/current-song.jpg' + imgSuffix;
+                    // must wait for RL to generate thet new jpg file
+                    window.setTimeout(function() {
+                        imgElem.src = imgSrc;
+                    }, 5000);
                     return;
                 }
 
@@ -157,7 +160,7 @@ function checkSongs() {
     });
 }
 
-setInterval(checkSongs, 5000);
+setInterval(checkSongs, 10000);
 </script>
 </body>
 </html>

@@ -24,7 +24,7 @@ def add_test_songs():
         song = Song('artist_' + str(i), 'title_' + str(i))
         playlist.appendleft(song)
 
-add_test_songs()
+#add_test_songs()
 
 render = web.template.render('templates/')
 
@@ -75,9 +75,12 @@ class songs:
 class logsong:
     def GET(self):
         params = web.input()
-        #print "log song: {}:{}".format(params.artist, params.title)
-        song = Song(params.artist, params.title)
-        playlist.appendleft(song)
+        print "log song: {}:{}".format(params.artist, params.title)
+        # don't log the PSAs
+        if params.artist != 'KZSU Stanford':
+            song = Song(params.artist, params.title)
+            playlist.appendleft(song)
+
         return 'success'
 
 
