@@ -27,8 +27,26 @@ header {
     font-weight: 700;
 }
 
+div.control-container {
+   margin-top: 10px;
+}
 div.song-container {
     margin-left: 20px;
+}
+
+div.control-container > h4 {
+    display:inline;
+}
+    
+#play-but {
+  vertical-align: middle;
+  outline: 0;
+  height: 30px;
+  width: 30px;
+  border-radius: 30px;
+  font-size: 15px;
+  background-color: #540100;
+  color: #FF7759;
 }
 
 @media screen and (min-width:680px) {
@@ -95,6 +113,7 @@ div.song-container {
   div.song-container {
     margin-left: 10px;
   }
+
 }
 
 </style> 
@@ -107,12 +126,21 @@ div.song-container {
     <header>
         <img id='current-song' alt="Current Song" src="/images/current-song.jpg">
     </header>
-    <div class='song-container'>
+ 
+    <audio id='audio-player' class='audio_volume_only preload='none'>
+      <source src="http://171.66.118.110:8080/kzsu-3-128.mp3" type="audio/mp3">
+    </audio>
+
+
+    <div class='control-container'>
+        <button  id="play-but">&#9658;</button>
         $if len(playlist) > 0:
             <h4>PLAYLIST FOR $playlist[0].date.strftime("%B %d, %Y")</h4>
         $else:
             <h4>Playlist is empty</h4>
+    </div>
     
+    <div class='song-container'>
         <div id='song-list'>
             $for song in playlist:
                 <div class='song-row'>
@@ -126,6 +154,15 @@ div.song-container {
 </div>
 
 <script>
+document.getElementById('play-but').addEventListener('click', function(event) {
+    let player = document.getElementById('audio-player');
+    let doPlay = player.paused;
+    let action = doPlay ? 'play' : 'pause';
+    player[action]();
+    this.innerHTML = doPlay ? '||' : '&#9658';
+    return false;
+});
+
 function checkSongs() {
     fetch('/songs').then(function(response) {
         return response.json();
