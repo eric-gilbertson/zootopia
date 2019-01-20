@@ -25,7 +25,6 @@ body {
    font-family: 'Roboto Slab', sans-serif;
    font-size: 14px;
    color: #C43825;
-   font-weight: 700;
    text-transform: uppercase;
 }
 
@@ -36,7 +35,7 @@ header {
 .top-container {
    margin: auto;
 }
-.song-row span {
+.song-row span.title-col {
     font-weight: 700;
 }
 
@@ -59,9 +58,10 @@ div.control-container > h4 {
 #play-but {
   vertical-align: middle;
   outline: 0;
-  height: 32px;
-  width: 32px;
-  border-radius: 32px;
+  height: 30px;
+  width: 30px;
+  border-radius: 30px;
+  border: 0px;
 }
 
 .is-paused {
@@ -157,9 +157,9 @@ div.control-container > h4 {
     <div class='control-container'>
         <div style='margin-bottom:8px'>LISTEN TO ZOOTOPIA NOW <button class='is-paused'  id="play-but"></button></div>
         $if len(playlist) > 0:
-            <h4>GREAT TUNES FOR $playlist[0].date.strftime("%B %d, %Y")</h4>
+            <div>GREAT TUNES FOR $playlist[0].date.strftime("%B %d, %Y")</div>
         $else:
-            <h4>Playlist is empty</h4>
+            <div>Playlist is empty</div>
     </div>
     
     <div class='song-container'>
@@ -167,7 +167,7 @@ div.control-container > h4 {
             <!-- NOTE: must match JS DOM construction below -->
             $for song in playlist:
                 <div class='song-row'>
-                    <span class='time-col'>$song.date.strftime("%H:%M")</span><span>$song.title</span><div><small>&nbsp—&nbsp;</small>$song.artist</div>
+                    <span class='time-col'>$song.date.strftime("%H:%M")</span><span class='title-col'>$song.title</span><div><small>&nbsp—&nbsp;</small>$song.artist</div>
                 </div>
         </div>
     </div>
@@ -218,7 +218,7 @@ function checkSongs() {
                 let newRow = document.createElement('div');
                 newRow.classList.add('song-row');
                 //NOTE: must match HTML template used by server.
-                newRow.innerHTML = '<span class="time-col">' + song.date + '</span><span>' + song.title + '</span><div><small>&nbsp;—&nbsp;</small> ' + song.artist;
+                newRow.innerHTML = '<span class="time-col">' + song.date + '</span><span class="title-col">' + song.title + '</span><div><small>&nbsp;—&nbsp;</small> ' + song.artist;
                 container.insertBefore(newRow, sampleRow);
             }
         }
