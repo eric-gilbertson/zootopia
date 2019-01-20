@@ -25,6 +25,7 @@ body {
    font-family: 'Roboto Slab', sans-serif;
    font-size: 14px;
    color: #C43825;
+   font-weight: 700;
    text-transform: uppercase;
 }
 
@@ -37,6 +38,11 @@ header {
 }
 .song-row span {
     font-weight: 700;
+}
+
+span.time-col {
+   display: inline-block;
+   width: 40px;
 }
 
 div.control-container {
@@ -53,12 +59,16 @@ div.control-container > h4 {
 #play-but {
   vertical-align: middle;
   outline: 0;
-  height: 30px;
-  width: 30px;
-  border-radius: 30px;
-  font-size: 15px;
-  background-color: #540100;
-  color: #FF7759;
+  height: 32px;
+  width: 32px;
+  border-radius: 32px;
+}
+
+.is-paused {
+  background-image: url("/images/play_button.png");
+}
+.is-playing {
+  background-image: url("/images/pause_button.png");
 }
 
 @media screen and (min-width:680px) {
@@ -145,21 +155,19 @@ div.control-container > h4 {
 
 
     <div class='control-container'>
-        <button  id="play-but">&#9658;</button>
+        <div style='margin-bottom:8px'>LISTEN TO ZOOTOPIA NOW <button class='is-paused'  id="play-but"></button></div>
         $if len(playlist) > 0:
-            <h4>PLAYLIST FOR $playlist[0].date.strftime("%B %d, %Y")</h4>
+            <h4>GREAT TUNES FOR $playlist[0].date.strftime("%B %d, %Y")</h4>
         $else:
             <h4>Playlist is empty</h4>
     </div>
     
     <div class='song-container'>
         <div id='song-list'>
+            <!-- NOTE: must match JS DOM construction below -->
             $for song in playlist:
                 <div class='song-row'>
-                    <!-- NOTE: must match JS DOM construction below -->
-                    $song.date.strftime("%H:%M")
-                    <span>&nbsp;&nbsp;$song.title</span>
-                    <div><small> — </small>$song.artist</div>
+                    <span class='time-col'>$song.date.strftime("%H:%M")</span><span>$song.title</span><div><small>&nbsp—&nbsp;</small>$song.artist</div>
                 </div>
         </div>
     </div>
@@ -168,10 +176,11 @@ div.control-container > h4 {
 <script>
 document.getElementById('play-but').addEventListener('click', function(event) {
     let player = document.getElementById('audio-player');
-    let doPlay = player.paused;
-    let action = doPlay ? 'play' : 'pause';
+    let isPaused = player.paused;
+    let action = isPaused ? 'play' : 'pause';
     player[action]();
-    this.innerHTML = doPlay ? '||' : '&#9658';
+    this.classList.remove(isPaused ? 'is-paused' : 'is-playing');
+    this.classList.add(isPaused ? 'is-playing' : 'is-paused');
     return false;
 });
 
@@ -183,10 +192,10 @@ function checkSongs() {
             return;
 
         let curSong = songs[0];
-        let rows = document.getElementsByClassName("song-row");
+        let time_spans = document.getElementsByClassName("time-col");
         let curTime = null
-        if (rows.length > 0)
-            curTime = rows[0].innerText.trim().split(' ')[0].trim();
+        if (time_spans.length > 0)
+            curTime = time_spans[0].innerText.trim();
 
         let haveChange = curTime !== songs[0].date;
         let container = document.getElementById("song-list");
@@ -209,7 +218,7 @@ function checkSongs() {
                 let newRow = document.createElement('div');
                 newRow.classList.add('song-row');
                 //NOTE: must match HTML template used by server.
-                newRow.innerHTML = song.date + '<span>&nbsp;&nbsp; ' + song.title + '</span><div><small> — </small> ' + song.artist;
+                newRow.innerHTML = '<span class="time-col">' + song.date + '</span><span>' + song.title + '</span><div><small>&nbsp;—&nbsp;</small> ' + song.artist;
                 container.insertBefore(newRow, sampleRow);
             }
         }

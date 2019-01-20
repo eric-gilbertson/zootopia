@@ -20,7 +20,7 @@ class Song(object):
 
 
 def add_test_songs():
-    for i in range(0, 1):
+    for i in range(0, 5):
         song = Song('artist_' + str(i), 'title_' + str(i))
         playlist.appendleft(song)
 
@@ -73,13 +73,22 @@ class songs:
         return json.dumps(songs)
 
 class logsong:
+    current_minutes = ''
+
     def GET(self):
         params = web.input()
-        print "log song: {}:{}".format(params.artist, params.title)
         # don't log the PSAs
         if params.artist != 'KZSU Stanford':
             song = Song(params.artist, params.title)
+            new_minutes = song.date.strftime("%M")
+            print "log song: {}:{}, {}, {}".format(params.artist, params.title, logsong.current_minutes, new_minutes)
+            # RL sometimes does a phantom publish at top of the hour. in this case
+            # we want to overwrite the current top entry with the new tune.
+            if logsong.current_minutes == new_minutes:
+                playlist.popleft()
+
             playlist.appendleft(song)
+            logsong.current_minutes = new_minutes
 
         return 'success'
 
