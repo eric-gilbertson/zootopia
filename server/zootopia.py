@@ -20,8 +20,15 @@ class Song(object):
 
 
 def add_test_songs():
+    song = Song('Parker Millsap', 'very last day', )
+    playlist.appendleft(song)
+
+    song = Song('The Beatles', 'Come Together wwwwww wwww www xxxxx wwww',)
+    playlist.appendleft(song)
+
     for i in range(0, 5):
-        song = Song('artist_' + str(i), 'title_' + str(i))
+        song = Song('very long artist name with long last name_' + str(i),
+                    'very long title name with extra long suffix_' + str(i))
         playlist.appendleft(song)
 
 #add_test_songs()

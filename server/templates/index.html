@@ -18,14 +18,15 @@ $def with (playlist)
 <link rel="shortcut icon" href="/images/favicon.ico">
 <meta charset='UTF-8' />
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!--
 <link href='https://fonts.googleapis.com/css?family=Roboto Slab' rel='stylesheet'>
+-->
 
 <style> 
 body {
    font-family: 'Roboto Slab', sans-serif;
    font-size: 14px;
    color: #C43825;
-   font-weight: 700;
    text-transform: uppercase;
 }
 
@@ -36,17 +37,22 @@ header {
 .top-container {
    margin: auto;
 }
-.song-row span {
-    font-weight: 700;
-}
-
-span.time-col {
-   display: inline-block;
+div.time-col {
+   float:left;
+   border: 1px solid white;
    width: 40px;
 }
 
+div.song-col > span:first-child {
+    font-weight: 700;
+}
+
+
 div.control-container {
+   margin-left: 20px;
+   font-weight: 900;
    margin-top: 10px;
+   margin-bottom: 10px;
 }
 div.song-container {
     margin-left: 20px;
@@ -59,9 +65,10 @@ div.control-container > h4 {
 #play-but {
   vertical-align: middle;
   outline: 0;
-  height: 32px;
-  width: 32px;
-  border-radius: 32px;
+  height: 30px;
+  width: 30px;
+  border-radius: 30px;
+  border: 0px;
 }
 
 .is-paused {
@@ -71,6 +78,10 @@ div.control-container > h4 {
   background-image: url("/images/pause_button.png");
 }
 
+.song-row div {
+    margin-left: 0px;
+    margin-bottom: 5px;
+  }
 @media screen and (min-width:680px) {
   header {
     background-image: url("/images/zootopia2.png");
@@ -86,11 +97,10 @@ div.control-container > h4 {
     margin-top: 20px;
   }
 
-  .song-row div {
-    display: inline-block;
-    margin-bottom: 5px;
+  div.song-col {
+    width: 560px;
+    word-wrap: break-word;
   }
-
   h4 {
     margin-top: 12px;
     margin-bottom: 8px;
@@ -118,6 +128,13 @@ div.control-container > h4 {
     margin-top: 10px;
   }
   
+  div.control-container {
+    margin-left: 10px;
+  }
+  div.song-col {
+    width: 300px;
+    word-wrap: break-word;
+  }
   h4 {
     margin-top: 10px;
     margin-bottom: 8px;
@@ -127,10 +144,11 @@ div.control-container > h4 {
     display: none;
   }
 
-  .song-row div {
-    margin-left: 44px;
-    margin-bottom: 5px;
+  .song-col > span {
+    display:block;
+    margin-left: 40px;
   }
+
 
   div.song-container {
     margin-left: 10px;
@@ -157,7 +175,7 @@ div.control-container > h4 {
     <div class='control-container'>
         <div style='margin-bottom:8px'>LISTEN TO ZOOTOPIA NOW <button class='is-paused'  id="play-but"></button></div>
         $if len(playlist) > 0:
-            <h4>GREAT TUNES FOR $playlist[0].date.strftime("%B %d, %Y")</h4>
+            <h4>MUSIC PLAYED ON $playlist[0].date.strftime("%B %d, %Y")</h4>
         $else:
             <h4>Playlist is empty</h4>
     </div>
@@ -166,10 +184,11 @@ div.control-container > h4 {
         <div id='song-list'>
             <!-- NOTE: must match JS DOM construction below -->
             $for song in playlist:
-                <div class='song-row'>
-                    <span class='time-col'>$song.date.strftime("%H:%M")</span><span>$song.title</span><div><small>&nbsp—&nbsp;</small>$song.artist</div>
-                </div>
-        </div>
+              <div class='song-row'>
+                <div class='time-col'>$song.date.strftime("%H:%M")</div>
+                <div class='song-col'><span>$song.title</span><small> - </small><span>$song.artist</span></div>
+              </div>
+         </div>
     </div>
 </div>
 
@@ -218,7 +237,7 @@ function checkSongs() {
                 let newRow = document.createElement('div');
                 newRow.classList.add('song-row');
                 //NOTE: must match HTML template used by server.
-                newRow.innerHTML = '<span class="time-col">' + song.date + '</span><span>' + song.title + '</span><div><small>&nbsp;—&nbsp;</small> ' + song.artist;
+                newRow.innerHTML = '<div class="time-col">' + song.date + '</div><div>' + song.title + '<small>&nbsp;—&nbsp;</small><span ' + song.artist + '</span></div>';;
                 container.insertBefore(newRow, sampleRow);
             }
         }
