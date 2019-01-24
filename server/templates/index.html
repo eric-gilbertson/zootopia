@@ -98,7 +98,7 @@ div.control-container > h4 {
   }
 
   div.song-col {
-    width: 560px;
+    width: 600px;
     word-wrap: break-word;
   }
   h4 {
@@ -175,9 +175,9 @@ div.control-container > h4 {
     <div class='control-container'>
         <div style='margin-bottom:8px'>LISTEN TO ZOOTOPIA NOW <button class='is-paused'  id="play-but"></button></div>
         $if len(playlist) > 0:
-            <h4>MUSIC PLAYED ON $playlist[0].date.strftime("%B %d, %Y")</h4>
+            <h4>MUSIC PLAYED ON $playlist[0].date.strftime("%b %d, %Y")</h4>
         $else:
-            <h4>Playlist is empty</h4>
+            <div>Playlist is empty</div>
     </div>
     
     <div class='song-container'>
@@ -237,7 +237,7 @@ function checkSongs() {
                 let newRow = document.createElement('div');
                 newRow.classList.add('song-row');
                 //NOTE: must match HTML template used by server.
-                newRow.innerHTML = '<div class="time-col">' + song.date + '</div><div>' + song.title + '<small>&nbsp;—&nbsp;</small><span ' + song.artist + '</span></div>';;
+                newRow.innerHTML = "<div class='song-row'><div class='time-col'>" + song.date + "</div><div class='song-col'><span>" + song.title+ "</span><small> - </small><span>" + song.artist + "</span></div></div>";
                 container.insertBefore(newRow, sampleRow);
             }
         }
