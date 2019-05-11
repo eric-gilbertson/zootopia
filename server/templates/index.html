@@ -170,7 +170,7 @@ div.control-container > h4 {
     </header>
  
     <audio id='audio-player' class='audio_volume_only preload='none'>
-      <source src="http://171.66.118.110:8080/kzsu-3-128.mp3" type="audio/mp3">
+      <source src="" type="audio/mp3">
     </audio>
 
 
@@ -196,10 +196,19 @@ div.control-container > h4 {
 
 <script>
 document.getElementById('play-but').addEventListener('click', function(event) {
+    srcUrl = "http://171.66.118.110:8080/kzsu-3-128.mp3";
     let player = document.getElementById('audio-player');
-    let isPaused = player.paused;
-    let action = isPaused ? 'play' : 'pause';
-    player[action]();
+    let url = player.getAttribute('src');
+    let isPaused = url == null || url.length ==  0;
+
+    if (isPaused) {
+        player.setAttribute('src', srcUrl);
+        player.play();
+    } else {
+        // stop playing by clearing src attribute
+        player.setAttribute('src', '');
+    }
+
     this.classList.remove(isPaused ? 'is-paused' : 'is-playing');
     this.classList.add(isPaused ? 'is-playing' : 'is-paused');
     return false;
