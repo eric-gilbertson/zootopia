@@ -208,7 +208,8 @@ document.getElementById('play-but').addEventListener('click', function(event) {
         player.setAttribute('src', srcUrl);
         player.play();
     } else {
-        // stop playing by clearing src attribute
+        // close stream by clearing src attribute
+        player.pause();
         player.setAttribute('src', '');
     }
 
