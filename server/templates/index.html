@@ -76,6 +76,10 @@ div.control-container > h4 {
   border: 0px;
 }
 
+#image-header:hover {
+  cursor: pointer;
+}
+
 .is-paused {
   background-image: url("/images/play_button.png");
 }
@@ -168,8 +172,10 @@ div.control-container > h4 {
 <!-- <button onclick='checkSongs()'>Check Songs</button></br> -->
 
 <div class='top-container'>
-    <header>
-        <img id='current-song' alt="Current Song" src="/images/current-song.jpg">
+    <header id='image-header'>
+        <a href="#'>
+            <img id='current-song' alt="Current Song" src="/images/current-song.jpg">
+        </a>
     </header>
  
     <audio id='audio-player' class='audio_volume_only preload='none'>
@@ -198,6 +204,9 @@ div.control-container > h4 {
 </div>
 
 <script>
+document.getElementById('image-header').addEventListener('click', function(event) {
+    location.assign("http://kzsu.stanford.edu")
+});
 document.getElementById('play-but').addEventListener('click', function(event) {
     srcUrl = "http://171.66.118.110:8080/kzsu-3-128.mp3";
     let player = document.getElementById('audio-player');
