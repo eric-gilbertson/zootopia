@@ -9,7 +9,8 @@ most recently played Zootopia tracks. Its input is provided by the RadioLogik
 DJ app using its publish feature to send the track info to the app server
 via HTTP GET requests. The app stores the most recent N tracks in memory 
 (no presistance yet) and uses it to build a web page that displays them
-to users.
+to users. The production version of this application can be found at 
+http://kzsu.rocks. It is deployed on a Mac in the Neil Diamond center.
 
 1) Configuring RadioLogik to publish to web app
 Radiologik must be configured to push each song to the web app. This is done
