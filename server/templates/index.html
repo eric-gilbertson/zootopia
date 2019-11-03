@@ -173,9 +173,7 @@ div.control-container > h4 {
 
 <div class='top-container'>
     <header id='image-header'>
-        <a href="#'>
             <img id='current-song' alt="Current Song" src="/images/current-song.jpg">
-        </a>
     </header>
  
     <audio id='audio-player' class='audio_volume_only preload='none'>
@@ -217,7 +215,8 @@ document.getElementById('play-but').addEventListener('click', function(event) {
         player.setAttribute('src', srcUrl);
         player.play();
     } else {
-        // stop playing by clearing src attribute
+        // close stream by clearing src attribute
+        player.pause();
         player.setAttribute('src', '');
     }
 
