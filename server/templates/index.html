@@ -226,7 +226,7 @@ document.getElementById('play-but').addEventListener('click', function(event) {
 });
 
 function checkSongs() {
-    fetch('/songs').then(function(response) {
+    fetch('http://kzsu.rocks/songs').then(function(response) {
         return response.json();
     }).then(function(songs) {
         if (songs.length == 0)
@@ -259,7 +259,15 @@ function checkSongs() {
                 let newRow = document.createElement('div');
                 newRow.classList.add('song-row');
                 //NOTE: must match HTML template used by server.
-                newRow.innerHTML = "<div class='time-col'>" + song.date + "</div><div class='song-col'><span>" + song.title+ "</span><small> - </small><span>" + song.artist + "</span></div>";
+                let title = song.title;
+                let year = '';
+                let parenIdx = song.title.length - 6;
+                // if title ends with (YYYY) then extract it and show at end of line.
+                if (title[parenIdx] == '(' && title[title.length - 1] == ')') {
+                    title = song.title.substring(0, parenIdx);
+                    year = song.title.substring(parenIdx);
+                }
+                newRow.innerHTML = "<div class='time-col'>" + song.date + "</div><div class='song-col'><span>" + title+ "</span><small> - </small><span>" + song.artist + " " + year + "</span></div>";
                 container.insertBefore(newRow, sampleRow);
             }
         }
