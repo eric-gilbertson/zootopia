@@ -5,7 +5,7 @@ import os
 from collections import deque
 import datetime
 
-playlist = deque([], maxlen=25)
+playlist = deque([], maxlen=100)
 
 class Song(object):
     def __init__(self, artist, title):
@@ -88,7 +88,9 @@ class logsong:
         if params.artist != 'KZSU Stanford':
             song = Song(params.artist, params.title)
             new_minutes = song.date.strftime("%M")
-            print "log song: {}:{}, {}, {}".format(params.artist, params.title, logsong.current_minutes, new_minutes)
+            # don't log on production because foreign characters will cause
+            # an exception.
+            #print "log song: {}:{}, {}, {}".format(params.artist, params.title, logsong.current_minutes, new_minutes)
             # RL sometimes does a phantom publish at top of the hour. in this case
             # we want to overwrite the current top entry with the new tune.
             if logsong.current_minutes == new_minutes:
